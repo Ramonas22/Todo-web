@@ -1,0 +1,42 @@
+If your local port is not 5500 change it in port.js
+
+
+Open index html in live server
+
+Inside index there are 2 options:
+
+* Register will lead to registration window
+* Login will lead to login window
+
+Register has 3 input fields and 2 options below.            | Login has 2 input fields and 2 options below
+Input fields are straight foward with few checks:           | Input fields are straigh foward with one check:
+*Fields cannot be empty                                     | *user with same name and surname must exist in database
+*Email must contain structure of Email                      | (there are few user already created which you could test
+*Field values cannot exist in database                      | if you don't wana create new ones : test1 test1, test2 test2, test3 test3)
+                                                            | 
+Buttons below:                                              | Buttons below:    
+*Register if all conditions above met will add              | *Login if conditions above met will lead to todo window
+new user to database and lead to Todo window                |
+                                                            | 
+*Cancel will lead to previous index window                  |*Cancel will lead to previous index window
+
+Todo html includes
+* Name and surname of user connected
+
+Logout button to go back to index window
+
+Add button to add new todo with fields
+*type
+*description
+*end date (Has no checks to prevent date before current date since
+todos could be scheduled in the past and still not be done but not added
+to the todo database)
+*Add button to insert todo to database (all fields must be filled)
+
+below that ther are all todos represnet related to this user
+each todo can be:
+*Edited
+*Updated
+*Cancel edit
+*Delelted
+by pressing coresponding buttons below
