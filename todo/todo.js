@@ -86,7 +86,8 @@ getTodo()
 function postTodo(e) {
     e.preventDefault()
     if (content.value == "") { content.value = "not described" }
-    fetch("https://testapi.io/api/Ramonas/resource/todoApp", {
+    //fetch("https://testapi.io/api/Ramonas/resource/todoApp", {
+    fetch(`http://localhost:8092/Todo/create`, {
         method: `POST`,
         headers: {
             'Content-Type': 'application/json'
@@ -95,7 +96,7 @@ function postTodo(e) {
             type: selectType.value,
             content: content.value,
             endDate: date.value,
-            key: JSON.parse(localStorage.getItem("user")).name
+            key: JSON.parse(localStorage.getItem("user")).id
         })
     })
     selectType.value = type[0]
@@ -105,19 +106,34 @@ function postTodo(e) {
     setTimeout(() => getTodo(), 2000)
 }
 
-function getTodo() {
+//Old way
+/*
+function getTodo1() {
     clearCards()
-    fetch("https://testapi.io/api/Ramonas/resource/todoApp")
+    //fetch("https://testapi.io/api/Ramonas/resource/todoApp")
+    fetch(`http://localhost:8092/Todo/`)
         .then(res => res.json())
         .then(data => {
+            console.log(data)
             let result = []
-            data.data.filter(todo => {
-                if (todo.key == JSON.parse(localStorage.getItem("user")).name) {
+            //data.data.filter(todo => {
+            data.filter(todo => {
+                if (todo.key == JSON.parse(localStorage.getItem("user")).id) {
                     result.push(todo)
                 }
             })
             result.forEach(card => createTodo(card))
         })
+}*/
+
+function getTodo() {
+    clearCards()
+    fetch(`http://localhost:8092/Todo/tasks/${JSON.parse(localStorage.getItem("user")).id}`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        data.forEach(card => createTodo(card))
+    })
 }
 
 //Creating todo cards from backend
@@ -208,7 +224,8 @@ function updateCard(e, id, card) {
     card[0].disabled = true
     card[1].disabled = true
     card[2].disabled = true
-    fetch(`https://testapi.io/api/Ramonas/resource/todoApp/${id}`, {
+    //fetch(`https://testapi.io/api/Ramonas/resource/todoApp/${id}`, {
+        fetch(`http://localhost:8092/Todo/update`, {
         method: `PUT`,
         headers: {
             'Content-Type': 'application/json'
@@ -217,7 +234,7 @@ function updateCard(e, id, card) {
             type: card.children[0].value,
             content: card.children[1].value,
             endDate: card.children[2].value,
-            key: JSON.parse(localStorage.getItem("user")).name
+            key: JSON.parse(localStorage.getItem("user")).id
         })
     })
 
@@ -240,7 +257,8 @@ function cancelUpdate(e, backup, card) {
 //Delete method
 function deleteCard(e, id) {
     e.preventDefault()
-    fetch(`https://testapi.io/api/Ramonas/resource/todoApp/${id}`, {
+    //fetch(`https://testapi.io/api/Ramonas/resource/todoApp/${id}`, {
+    fetch(`http://localhost:8092/Todo/delete/${id}`, {
         method: `DELETE`,
         headers: {
             'Content-Type': 'application/json'

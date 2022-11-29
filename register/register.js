@@ -82,17 +82,18 @@ submitBtn.addEventListener(`click`,
 //Register function
 function register(e) {
     e.preventDefault()
-    if (checkIfNotEmpoty()) {
+    if (checkIfNotEmpty()) {
         checkUser().then((doesUserExist) => {
             if (doesUserExist) {
-                fetch("https://testapi.io/api/Ramonas/resource/user", {
+               // fetch("https://testapi.io/api/Ramonas/resource/user", {
+                fetch(`http://localhost:8092/User/create`, {    
                     method: `POST`,
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ Name: nameInput.value, Surname: surnameInput.value, Email: emailInput.value })
+                    body: JSON.stringify({ name: nameInput.value, surname: surnameInput.value, email: emailInput.value })
                 }).then(res => {
-                    if (res.status == 201) {
+                    if (res.status == 200) {
                         localStorage.setItem(`user`, JSON.stringify({
                             id: nameInput.value,
                             name: nameInput.value,
@@ -112,31 +113,39 @@ function register(e) {
 
 async function checkUser() {
     let flag = true
-    await fetch("https://testapi.io/api/Ramonas/resource/user")
+    //await fetch("https://testapi.io/api/Ramonas/resource/user")
+    fetch(`http://localhost:8092/User/`)
         .then(res => res.json())
         .then(data => {
-            let users = data.data
+            //let users = data.data
+            let users = data
+            console.log(users)
             for (let i = 0; i < users.length && flag; i++) {
-                if (users[i].Name == nameInput.value) {
+                if (users[i].name == nameInput.value) {
                     errorField.style.visibility = "visible"
                     errorField.textContent = "User with same name already exists"
+                    console.log("here1")
                     flag = false
-                } else if (users[i].Surname == surnameInput.value) {
+                } else if (users[i].surname == surnameInput.value) {
                     errorField.style.visibility = "visible"
                     errorField.textContent = "User with same surname already exists"
+                    console.log("here2")
                     flag = false
-                } else if (users[i].Email == emailInput.value) {
+                } else if (users[i].email == emailInput.value) {
                     errorField.style.visibility = "visible"
                     errorField.textContent = "User with same email already exists"
+                    console.log("here3")
                     flag = false
                 }
             }
+            console.log("here4")
             return flag
         })
+        console.log("here5")
     return flag
 }
 
-function checkIfNotEmpoty() {
+function checkIfNotEmpty() {
     if (nameInput.value == "" || nameInput.value.length < 1) {
         errorField.style.visibility = "visible"
         errorField.textContent = "Name is required"

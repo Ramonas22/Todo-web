@@ -1,6 +1,6 @@
 let mainDiv = document.createElement(`div`)
 document.body.appendChild(mainDiv)
-mainDiv.className=`mainDiv`
+mainDiv.className = `mainDiv`
 
 
 let myForm = document.createElement(`form`)
@@ -63,30 +63,33 @@ errorField.textContent = "User does not exist"
 errorField.classList = "error"
 errorField.style.visibility = "hidden"
 
-submitBtn.addEventListener(`click`, (eve)=> login(eve))
+submitBtn.addEventListener(`click`, (eve) => login(eve))
 
-function login(e){
+function login(e) {
     e.preventDefault()
-    fetch(`https://testapi.io/api/Ramonas/resource/user`)
-    .then(res => res.json())
-    .then(data => {
-        let users = data.data
-        let flag = true;
-        for(let i = 0; i < users.length; i++){
-            if(users[i].Name == nameInput.value && users[i].Surname == surnameInput.value){
-                localStorage.setItem("user",JSON.stringify({
-                    id: users[i].id,
-                    name: users[i].Name,
-                    surname: users[i].Surname,
-                    email: users[i].Email
-                }))
-                window.location.href = `http://127.0.0.1:${port}/todo/todo.html`
-                flag= false
+    //fetch(`https://testapi.io/api/Ramonas/resource/user`)
+    fetch(`http://localhost:8092/User/`)
+        .then(res => res.json())
+        .then(data => {
+            // let users = data.data
+            let users = data
+            console.log(users)
+            let flag = true;
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].name == nameInput.value && users[i].surname == surnameInput.value) {
+                    localStorage.setItem("user", JSON.stringify({
+                        id: users[i].id,
+                        name: users[i].name,
+                        surname: users[i].surname,
+                        email: users[i].email
+                    }))
+                    window.location.href = `http://127.0.0.1:${port}/todo/todo.html`
+                    flag = false
+                }
             }
-        }
-        if(flag){
-            errorField.style.visibility = "visible"
-        }
+            if (flag) {
+                errorField.style.visibility = "visible"
+            }
 
-    })
+        })
 }
